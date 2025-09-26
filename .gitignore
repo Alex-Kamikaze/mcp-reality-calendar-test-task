@@ -5,9 +5,14 @@ build/
 dist/
 wheels/
 *.egg-info
+.pytest_cache/
 
 # Virtual environments
 .venv
 .env
 
-.pytest_cache/
+cache.db
+
+credentials.json
+token.json
+
