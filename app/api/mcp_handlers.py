@@ -51,6 +51,38 @@ def get_product_description(name: str) -> str:
     except CacheException:
         return "Не удалось загрузить информацию из кэша из-за внутренней ошибки. Повторите запрос позже"
 
+@app.tool()
+def list_products() -> List[str]:
+    """
+    Возвращает список всех доступных продуктов в базе данных
+    
+    :return: Список названий продуктов
+    """
+    try:
+        service = provide_service()
+        products = service.list_products()
+        return products
+    except CacheException:
+        return ["Не удалось загрузить список продуктов из-за внутренней ошибки"]
+
+@app.tool()
+def get_product_info(name: str) -> str:
+    """
+    Получает подробную информацию о продукте по его названию
+    
+    :param name: Название продукта
+    :return: Описание продукта с официального сайта
+    """
+    try:
+        service = provide_service()
+        product = service.get_product(name)
+        if product is None:
+            return f"Информация о продукте '{name}' не была найдена в базе данных"
+        else:
+            return f"Продукт: {product.name}\n\nОписание:\n{product.description}"
+    except CacheException:
+        return "Не удалось загрузить информацию из кэша из-за внутренней ошибки. Повторите запрос позже"
+
 @app.prompt(name="get_product_summarized_information")
 def summarize_product_information(name: str) -> str:
     """
